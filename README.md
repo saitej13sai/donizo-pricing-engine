@@ -43,7 +43,7 @@ Simulate Mode — No external API calls, instant results with random but realist
 
 ⚙️ Setup & Run
 1️⃣ Clone Repo & Setup Environment
-git clone https://github.com/YOUR_USERNAME/donizo-pricing-engine.git
+git clone https://github.com/saitej13sai/donizo-pricing-engine.git
 cd donizo-pricing-engine
 python -m venv .venv
 source .venv/bin/activate
