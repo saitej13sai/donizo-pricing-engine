@@ -1,4 +1,4 @@
-#🛠️ Donizo Smart Semantic Pricing Engine (Simulate Mode)
+🛠️ Donizo Smart Semantic Pricing Engine (Simulate Mode)
 Smart semantic pricing engine for renovation materials.
 Handles fuzzy, multilingual queries; returns high-confidence material matches; generates structured proposals with VAT, margin logic, and confidence scoring — per Donizo Founding Data Engineer Test Case 3.
 ## 📂 Project Structure
