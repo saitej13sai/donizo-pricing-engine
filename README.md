@@ -30,20 +30,26 @@ Handles fuzzy, multilingual queries; returns high-confidence material matches; g
 ├── .env.example                     # sample env vars (DATABASE_URL, OPENAI_API_KEY, EMBED_MODE)
 ├── README.md                        # project documentation & usage
 └── .gitignore                       # ignores venv, data artifacts, cache
+
 #🚀 1) How to Run
+
 Install dependencies
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+
 ✅ Start database
 docker compose up -d db
 export DATABASE_URL=postgresql+psycopg2://donizo:donizo@localhost:5432/pricing
+
 ✅ Generate dataset & seed (Simulate Mode)
 export EMBED_MODE=simulate
 python generate_dataset.py
 python seed.py
+
 ✅ Run API
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
 ✅ You can now test:
 
 ✅Material Search
@@ -56,13 +62,21 @@ curl -s -X POST http://127.0.0.1:8000/generate-proposal \
 curl -s -X POST http://127.0.0.1:8000/feedback \
   -H "Content-Type: application/json" \
   -d '{"task_id":"abc123","quote_id":"q456","user_type":"contractor","verdict":"overpriced","comment":"Tile price high for this city","target_component":"materials"}'
-📄 2) Output CSV (material search example)
-material_name,description,unit_price,unit,region,vendor,vat_rate,quality_score,updated_at,source
-Grout Anti-Mold White,Tile grout with anti-mold additive; white; bathroom and kitchen use,20.55,€/unit,Auvergne-Rhône-Alpes,PointP,10,5,2025-08-03T14:30:00Z,https://www.bricodepot.fr/produit/grout-anti-mold-white
-Outdoor Cement Mix,"Weather-resistant cement mix for outdoor tiling, durable; suitable for patios",42.28,€/m²,PACA,Brico,,4,2025-08-03T14:30:00Z,https://www.pointp.fr/produit/outdoor-cement-mix
-Outdoor Cement Mix,"Weather-resistant cement mix for outdoor tiling, durable; suitable for patios",11.41,€/liter,Occitanie,Leroy Merlin,,1,2025-08-03T14:30:00Z,https://www.pointp.fr/produit/outdoor-cement-mix
-Matte White Ceramic Tile 60x60,"60x60cm waterproof ceramic tile, matte finish, wall, indoor, bathroom",1.8,€/kg,Belgium,Brico Dépôt,,2,2025-08-03T14:30:00Z,https://www.castorama.fr/produit/matte-white-ceramic-tile-60x60
-Outdoor Cement Mix,"Weather-resistant cement mix for outdoor tiling, durable; suitable for patios",41.12,€/m²,Île-de-France,PointP,20,1,2025-08-03T14:30:00Z,https://www.pointp.fr/produit/outdoor-cement-mix
+
+📄 2) Output JSON (material search example)
+{
+    "material_name": "Grout Anti-Mold White",
+    "description": "Tile grout with anti-mold additive; white; bathroom and kitchen use",
+    "unit_price": 20.55,
+    "unit": "€/unit",
+    "region": "Auvergne-Rhône-Alpes",
+    "vendor": "PointP",
+    "vat_rate": 10,
+    "quality_score": 5,
+    "updated_at": "2025-08-03T14:30:00Z",
+    "source": "https://www.bricodepot.fr/produit/grout-anti-mold-white"
+  }
+
 ⚙️ 3) Pricing & Margin Logic
 
 ✅ Materials: Unit prices from data/materials.csv
@@ -77,12 +91,16 @@ Clamped between 15–35%
 20% otherwise
 ✅ Confidence:
 Derived from similarity score → HIGH / MEDIUM / LOW tiers
+
 📌 4) Assumptions & Edge Cases
+
 EMBED_MODE=simulate bypasses actual vector math and uses random realistic similarity scores.
 If no region match is found, returns top matches across all regions.
 Multilingual query handling supported.
 Fallback margin logic if missing price data.
+
 🧠 5) Bonus Features Implemented
+
 ✅ Simulate Mode (offline, no API key required)
 ✅ Region filters
 ✅ Confidence tiers for margin protection
@@ -90,10 +108,12 @@ Fallback margin logic if missing price data.
 ✅ Docker-ready with pgvector schema
 
 🔮 6) Future Improvements
+
 Real embeddings via OpenAI or local embedding models
 Live supplier price API integration
 Per-task labor productivity adjustment
 Multilingual embeddings for EN/FR/ES
+
 🧪 7) Run Tests
 pytest tests/
 
