@@ -1,0 +1,48 @@
+defaults:
+  currency: "EUR"
+  default_region: "Île-de-France"
+  default_vat_reno: 0.10
+  default_vat_new: 0.20
+  contractor_margin: 0.25
+  confidence_tiers:
+    HIGH: 0.85
+    MEDIUM: 0.70
+    LOW: 0.50
+
+filters:
+  units_normalization:
+    "€/sqm": "€/m²"
+    "€/m2": "€/m²"
+    "€/m^2": "€/m²"
+    "€/litre": "€/liter"
+    "€/kg": "€/kg"
+  allowed_units: ["€/m²", "€/kg", "€/liter", "€/unit"]
+
+regions:
+  "Île-de-France": 1.10
+  "PACA": 1.05
+  "Auvergne-Rhône-Alpes": 1.03
+  "Occitanie": 0.98
+  "Belgium": 1.08
+
+embedding:
+  provider: "openai"
+  model: "text-embedding-3-small"
+  dimensions: 1536
+
+search:
+  top_k: 5
+  min_score: 0.50
+
+proposal:
+  task_lexicon:
+    tile: {label: "Tile bathroom walls", base_labor_hours: 8}
+    glue: {label: "Apply tile adhesive", base_labor_hours: 2}
+    cement: {label: "Prepare surface / cement", base_labor_hours: 2}
+  labor_rate_per_hour: 45
+  fallback_vendor: "DonizoSim"
+  fallback_note: "Local stock simulated when region match is missing."
+
+feedback:
+  region_price_bias_lr: 0.02
+  material_quality_bias_lr: 0.02
